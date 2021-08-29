@@ -19,6 +19,6 @@ export default function handler(
   res.status(200).json({
     error: false,
     message: "Data successfully fetched!",
-    response: regions,
+    response: {regions: regions},
   });
 }

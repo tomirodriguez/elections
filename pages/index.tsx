@@ -2,11 +2,24 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import ApiResponse from "../model/ApiResponse";
 import { Category } from "../model/Category";
+import { Region } from "../model/Region";
 
 export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [regions, setRegions] = useState<Region[]>([]);
   const [currentCategory, setCurrentCategory] = useState<Category | null>();
 
+  useEffect(() => {
+    fetch("/api/region")
+      .then((res) => res.json())
+      .then((json: ApiResponse) => {
+        if (json.error) throw new Error(json.message);
+        const { regions } = json.response;
+
+        setRegions(regions);
+        // setCurrentCategory(regions[0]);
+      });
+  }, []);
   useEffect(() => {
     fetch("/api/categories")
       .then((res) => res.json())
