@@ -7,7 +7,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
-  const fileData = fs.readFileSync("./data/regions.json", "utf-8");
+  const fileData = fs.readFileSync("data/regions.json", "utf-8");
 
   const regions = JSON.parse(fileData);
   res.status(200).json({
