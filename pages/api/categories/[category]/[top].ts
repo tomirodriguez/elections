@@ -18,7 +18,7 @@ export default function handler(
     ? categoryParam[0]
     : categoryParam;
 
-  const fileData = fs.readFileSync("public/data/categories.json", "utf-8");
+  const fileData = fs.readFileSync("data/categories.json", "utf-8");
 
   const categories = JSON.parse(fileData);
   const data: { name: string; categories: any[] } = categories[category];
