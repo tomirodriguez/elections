@@ -11,21 +11,14 @@ export default function handler(
   res: NextApiResponse<ApiResponse>
 ) {
   const fileData = fs.readFileSync(
-    path.join(jsonFiles, "categories.json"),
+    path.join(jsonFiles, "regions.json"),
     "utf-8"
   );
 
-  const categories = JSON.parse(fileData);
-
-  const categoriesName = Object.getOwnPropertyNames(categories);
-
+  const regions = JSON.parse(fileData)
   res.status(200).json({
     error: false,
     message: "Data successfully fetched!",
-    response: {
-      categories: categoriesName.map((catName) => {
-        return { code: catName, name: categories[catName].name };
-      }),
-    },
+    response: regions,
   });
 }
