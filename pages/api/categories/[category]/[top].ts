@@ -5,7 +5,7 @@ import path from "path";
 import ApiResponse from "../../../../model/ApiResponse";
 import { getTopCandidates } from "../../../../utilities/utils";
 
-const jsonFiles = path.join(process.cwd(), "data");
+const jsonFiles = path.join(process.cwd(), "public/data");
 
 export default function handler(
   req: NextApiRequest,

@@ -5,8 +5,8 @@ const start = async () => {
   const regionsMap = await regions.createRegionsFile();
   console.log("REGIONES TERMINADAS");
 
-  // const categoriesMap = await categories.createCategoriesFile();
-  // console.log("CATEGORIAS TERMINADAS");
+  const categoriesMap = await categories.createCategoriesFile();
+  console.log("CATEGORIAS TERMINADAS");
 };
 
 start();

@@ -49,8 +49,6 @@ const createRegionsFile = async () => {
     };
   });
 
-  console.log(arrayToStore);
-
   fileWriter.writeFile("regions", arrayToStore);
 
   return regionsMap;

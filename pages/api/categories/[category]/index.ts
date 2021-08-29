@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
 import ApiResponse from "../../../../model/ApiResponse";
 
-const jsonFiles = path.join(process.cwd(), "data");
+const jsonFiles = path.join(process.cwd(), "public/data");
 
 export default function handler(
   req: NextApiRequest,
