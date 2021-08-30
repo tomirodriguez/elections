@@ -5,43 +5,30 @@ import { Category } from "../model/Category";
 import { Region } from "../model/Region";
 
 export default function Home() {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState(null);
   const [regions, setRegions] = useState<Region[]>([]);
-  const [currentCategory, setCurrentCategory] = useState<Category | null>();
+  const [currentCategory, setCurrentCategory] = useState();
 
   useEffect(() => {
-    fetch("/api/region")
+    fetch("/data/regions.json")
       .then((res) => res.json())
-      .then((json: ApiResponse) => {
-        if (json.error) throw new Error(json.message);
-        const { regions } = json.response;
-
-        setRegions(regions);
-        // setCurrentCategory(regions[0]);
-      });
-  }, []);
-  useEffect(() => {
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((json: ApiResponse) => {
-        if (json.error) throw new Error(json.message);
-        const { categories } = json.response;
-
-        setCategories(categories);
-        setCurrentCategory(categories[0]);
+      .then((json) => {
+        setRegions(json);
       });
   }, []);
 
   useEffect(() => {
-    if (currentCategory)
-      fetch(`/api/categories/${currentCategory.code}`)
-        .then((res) => res.json())
-        .then((json: ApiResponse) => {
-          if (json.error) throw new Error(json.message);
-          const { response } = json;
-          console.log(response);
-        });
-  }, [currentCategory]);
+    fetch("/data/categories.json")
+      .then((res) => res.json())
+      .then((json) => {
+        console.log(json);
+
+        setCategories(json);
+        setCurrentCategory(json.president);
+      });
+  }, []);
+
+  console.log(categories);
 
   return (
     <div>
@@ -51,13 +38,66 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        {categories.length === 0 ? (
-          <div>LOADING</div>
-        ) : (
+      <main className="container">
+        <ul
+          className="d-flex jc-between"
+          style={{
+            backgroundColor: "gray",
+            color: "white",
+            textTransform: "uppercase",
+            padding: "0 10px",
+          }}
+        >
+          <li
+            style={{ cursor: "pointer" }}
+            onClick={() => setCurrentCategory(categories?.president || null)}
+          >
+            Presidente
+          </li>
+
+          <li
+            style={{ cursor: "pointer" }}
+            onClick={() => setCurrentCategory(categories?.governor || null)}
+          >
+            Gobernadores
+          </li>
+
+          <li
+            style={{ cursor: "pointer" }}
+            onClick={() => setCurrentCategory(categories?.deputy || null)}
+          >
+            Diputados
+          </li>
+
+          <li
+            style={{ cursor: "pointer" }}
+            onClick={() => setCurrentCategory(categories?.senator || null)}
+          >
+            Senadores
+          </li>
+
+          <li
+            style={{ cursor: "pointer" }}
+            onClick={() => setCurrentCategory(categories?.mayor || null)}
+          >
+            Intendentes
+          </li>
+        </ul>
+        <h2 style={{ marginTop: 30 }}>RESULTADOS</h2>
+        {categories && currentCategory && (
           <ul>
-            {categories.map((cat: Category) => (
-              <li key={cat.code}>{cat.name}</li>
+            {currentCategory.categories.map((cat) => (
+              <li key={cat.code}>
+                <h3>{cat.name}</h3>
+                <ul style={{ margin: "15px 0" }}>
+                  {cat.candidates.map((candidate) => (
+                    <li key={candidate.list.code}>
+                      <b>{candidate.totalVotes}</b> -{" "}
+                      {candidate.agrupation.name} -{candidate.list.name}
+                    </li>
+                  ))}
+                </ul>
+              </li>
             ))}
           </ul>
         )}
