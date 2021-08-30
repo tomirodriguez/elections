@@ -5,9 +5,9 @@ import { Category } from "../model/Category";
 import { Region } from "../model/Region";
 
 export default function Home() {
-  const [categories, setCategories] = useState(null);
+  const [categories, setCategories] = useState<any>(null);
   const [regions, setRegions] = useState<Region[]>([]);
-  const [currentCategory, setCurrentCategory] = useState();
+  const [currentCategory, setCurrentCategory] = useState<any>();
 
   useEffect(() => {
     fetch("/data/regions.json")
@@ -86,11 +86,11 @@ export default function Home() {
         <h2 style={{ marginTop: 30 }}>RESULTADOS</h2>
         {categories && currentCategory && (
           <ul>
-            {currentCategory.categories.map((cat) => (
+            {currentCategory?.categories.map((cat: any) => (
               <li key={cat.code}>
                 <h3>{cat.name}</h3>
                 <ul style={{ margin: "15px 0" }}>
-                  {cat.candidates.map((candidate) => (
+                  {cat.candidates.map((candidate: any) => (
                     <li key={candidate.list.code}>
                       <b>{candidate.totalVotes}</b> -{" "}
                       {candidate.agrupation.name} -{candidate.list.name}
