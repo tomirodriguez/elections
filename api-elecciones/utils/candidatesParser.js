@@ -56,7 +56,7 @@ const getCandidatesByCategeory = async () => {
         }
 
         currentAgrupation = currentDistrict.agrupations.find(
-          (agrupation) => agrupation.code === list.agrupationName
+          (agrupation) => agrupation.code === list.agrupationCode
         );
 
         if (!currentAgrupation) {
