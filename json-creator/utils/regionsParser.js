@@ -5,26 +5,44 @@ const regionsMap = new Map();
 const regionsArray = [];
 
 const storeLine = (line) => {
-  if (line[0].length <= 7 && parseInt(line[0]) !== 0) {
+  if (parseInt(line[0]) <= 999999) {
     regionsArray.push({ code: line[0], name: line[1] });
   }
 };
 
 const resolveMap = (resolve) => {
-  const regions = regionsArray.filter((region) => region.code.length <= 3);
-  regions.forEach((province) =>
-    regionsMap.set(province.code, { name: province.name, districts: [] })
+  const country = regionsArray.find((region) => parseInt(region.code) === 0);
+
+  const regionsTree = { ...country, inside: [] };
+
+  const provinces = regionsArray.filter(
+    (region) => parseInt(region.code) > 0 && parseInt(region.code) < 1000
   );
 
-  const districts = regionsArray.filter((region) => region.code.length >= 4);
-  districts.forEach((district) => {
-    const provinceCode = district.code.slice(0, 2);
-    regionsMap
-      .get(provinceCode)
-      .districts.push({ code: district.code, name: district.name });
+  provinces.forEach((province) => {
+    regionsTree.inside.push({ ...province, inside: [] });
   });
 
-  resolve(regionsMap);
+  const districts = regionsArray.filter(
+    (region) => parseInt(region.code) >= 1000
+  );
+
+  districts.forEach((district) => {
+    const provinceCode = district.code.substring(0, 2);
+
+    const newDistrict = {
+      code: district.code.substring(2, 5),
+      name: district.name,
+    };
+
+    const province = regionsTree.inside.find(
+      (province) => province.code === provinceCode
+    );
+
+    province.inside.push(newDistrict);
+  });
+
+  resolve(regionsTree);
 };
 
 const getRegions = () => {
@@ -36,22 +54,11 @@ const getRegions = () => {
 };
 
 const createRegionsFile = async () => {
-  const regionsMap = await getRegions();
-  const mapToArray = Array.from(regionsMap).sort(
-    (a, b) => parseInt(a[0]) - parseInt(b[0])
-  );
+  const regions = await getRegions();
 
-  const arrayToStore = mapToArray.map((entry) => {
-    return {
-      code: entry[0],
-      name: entry[1].name,
-      districts: entry[1].districts,
-    };
-  });
+  fileWriter.writeFile("regions", regions);
 
-  fileWriter.writeFile("regions", arrayToStore);
-
-  return regionsMap;
+  return regions;
 };
 
 exports.createRegionsFile = createRegionsFile;

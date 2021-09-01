@@ -6,7 +6,13 @@ const start = async () => {
   console.log("REGIONES TERMINADAS");
 
   const categoriesMap = await categories.createCategoriesFile();
-  console.log("CATEGORIAS TERMINADAS");
+  console.log("CATEGORIAS TERMINADAS", categoriesMap);
+
+  const candidatesCategories = Object.getOwnPropertyNames(categoriesMap)
+
+  candidatesCategories.forEach(category => {
+    categoriesMap[category]
+  })
 };
 
 start();

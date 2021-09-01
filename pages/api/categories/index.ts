@@ -1,27 +1,27 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import fs from "fs";
 import type { NextApiRequest, NextApiResponse } from "next";
 import ApiResponse from "../../../model/ApiResponse";
+const candidates = require("../../../api-elecciones/utils/candidatesParser");
 
 // const jsonFiles = path.join(process.cwd(), "public/data");
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
-  const fileData = fs.readFileSync("public/data/categories.json", "utf-8");
+  // const fileData = fs.readFileSync("public/data/categories.json", "utf-8");
 
-  const categories = JSON.parse(fileData);
+  // const categories = JSON.parse(fileData);
 
-  const categoriesName = Object.getOwnPropertyNames(categories);
+  // const categoriesName = Object.getOwnPropertyNames(categories);
+
+  const candidatesByCategory = await candidates.getCandidatesByRegion();
 
   res.status(200).json({
     error: false,
     message: "Data successfully fetched!",
     response: {
-      categories: categoriesName.map((catName) => {
-        return { code: catName, name: categories[catName].name };
-      }),
+      candidates: candidatesByCategory,
     },
   });
 }

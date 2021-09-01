@@ -69,7 +69,7 @@ const storeLine = (line) => {
   }
 };
 
-const resolveMap = async (resolve) => {
+const resolveMap = async (resolve, regions) => {
   const afterVotes = () => {
     const finalJson = {
       president: { name: "Presidente", categories: [] },
@@ -93,8 +93,17 @@ const resolveMap = async (resolve) => {
         } = candidate;
         return { agrupation, list, totalVotes };
       });
+
+      const codeValue = data[0];
+
+      const code = {
+        category: codeValue.substring(0, 4),
+        province: codeValue.substring(4, 6),
+        region: codeValue.substring(6, 11),
+      };
+
       const finalData = {
-        code: data[0],
+        code,
         name: data[1][0].category.name,
         candidates: resumedCandidates.sort(
           (a, b) => b.totalVotes - a.totalVotes
@@ -132,16 +141,16 @@ const resolveMap = async (resolve) => {
   );
 };
 
-const getCategories = () => {
+const getCategories = (regions) => {
   return new Promise((resolve, reject) => {
     fileReader.readFile("descripcion_postulaciones.dsv", storeLine, () =>
-      resolveMap(resolve)
+      resolveMap(resolve, regions)
     );
   });
 };
 
-const createCategoriesFile = async () => {
-  const categoriesJSON = await getCategories();
+const createCategoriesFile = async (regions) => {
+  const categoriesJSON = await getCategories(regions);
   fileWriter.writeFile("categories", categoriesJSON);
 
   return categoriesJSON;
