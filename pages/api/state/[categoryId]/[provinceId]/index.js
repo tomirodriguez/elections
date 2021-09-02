@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-const regions = require("../../../../api-elecciones/utils/regionsParser");
-const token = require("../../../../api-elecciones/utils/getToken");
-const ApiFetcher = require("../../../../api-elecciones/utils/axios").ApiFetcher;
+const regions = require("../../../../../api-elecciones/utils/regionsParser");
+const token = require("../../../../../api-elecciones/utils/getToken");
+const ApiFetcher = require("../../../../../api-elecciones/utils/axios").ApiFetcher;
 
 export default async function handler(req, res) {
   const { categoryId, provinceId } = req.query;
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
       .then((response) => {
         if (response.data)
           return {
-            region: provinceId,
+            province: provinceId,
             state: response.data,
           };
         throw new Error("No found");
