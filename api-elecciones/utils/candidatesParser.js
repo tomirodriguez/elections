@@ -12,8 +12,8 @@ class List {
   }
 }
 
-const getCandidatesByCategeory = async () => {
-  return await axios
+const getCandidatesByCategeory = async (fetcher) => {
+  return await fetcher
     .get("catalogo/csv/getAgrupacionesListas")
     .then((response) => {
       const splitted = response.data.split("\r\n");

@@ -1,9 +1,15 @@
 const axios = require("axios").default;
 
-const token =
-  "eyJraWQiOiJNUXl4bzRiTGNEY2ZNM2V6MExSemNXcVFhaE1mb1doUHZ6SXo2RVpQalNRPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJiYmRkYWFlNC1hOGVjLTRhZDAtYWJmNi04ZWVmMDI4ODczZmUiLCJldmVudF9pZCI6ImQzYjE2ZGYwLTNmMWYtNDBiNi04YTY4LWJmYTQ1OWE1YWU0MCIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoib3BlbmlkIGVtYWlsIiwiYXV0aF90aW1lIjoxNjMwNTg4NzgzLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV94cDRUcFhTa3ciLCJleHAiOjE2MzA2NzUxODMsImlhdCI6MTYzMDU4ODc4MywidmVyc2lvbiI6MiwianRpIjoiYjg3MDA3ZTAtNTJjOC00YTVjLThmMTUtZmIwZGRmZDU0OTQ4IiwiY2xpZW50X2lkIjoiZjBkYXBjamxkY3Nic2x2bm5xaHR2bmdqcyIsInVzZXJuYW1lIjoicHJlbnNhMTEyIn0.k6cxwVvXsQFGhINwJx3EgduQPcjTfI0zrm4gsPPZXLTjgWIJH26ZE6W8EGX6hT_J45h_CdAVxuZrNzXHYD1jYpkzdbgdWyuBtawbhj-zFqbCBrOuA40o3i-YLs9CWJV4E17f__erJh7L2Qqxm2jgw-7u4qys1DORhP2BkOkps6DRGOFySaVv7gdCsU1RK6gBkr1NZvpsLRZDVXcvAw419kqdJkQCD3Pl0CimLBWLgOjLpHXr75zMSsBiXvYb6_zDA6hGeb2VCRs9W5xrBUzoa-a9PWOipyi8oD5zBPhaAFsccdm1eMYLRN6ZvHZLg1fRCDGvStc478HKPoITtz25Aw";
+class ApiFetcher {
+  constructor(token) {
+    this.token = token;
+    axios.defaults.baseURL = "https://api.resultados.gob.ar/api/";
+    axios.defaults.headers.common = { Authorization: `bearer ${token}` };
+  }
 
-axios.defaults.baseURL = "https://api.resultados.gob.ar/api/";
-axios.defaults.headers.common = { Authorization: `bearer ${token}` };
+  get(path) {
+    return axios.get(path);
+  }
+}
 
-exports.axios = axios;
+exports.ApiFetcher = ApiFetcher;

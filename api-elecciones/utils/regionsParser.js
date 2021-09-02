@@ -11,8 +11,8 @@ class Region {
   }
 }
 
-const getRegionsByCategeory = async () => {
-  return await axios.get("catalogo/csv/getAmbitos").then((response) => {
+const getRegionsByCategeory = async (fetcher) => {
+  return await fetcher.get("catalogo/csv/getAmbitos").then((response) => {
     const splitted = response.data.split("\r\n");
     const categories = [];
 
