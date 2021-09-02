@@ -1,0 +1,585 @@
+---
+openapi: 3.0.3
+info:
+  title: API de Publicación de Resultados
+  description: API de Publicación de Resultados Electorales de las Elecciones Legislativas 2021. Para su uso se requiere autenticación mediante Bearer Token
+  termsOfService: https://api.resultados.gob.ar/tos.html
+  contact:
+    email: soportedine@mininterior.gob.ar
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 2.1.1
+externalDocs:
+  description: Más acerca de esta API
+  url: https://api.resultados.gob.ar/
+servers:
+  - url: https://api.resultados.gob.ar/api
+tags:
+  - name: resultados
+    description: Valores Electorales Totalizados
+  - name: catalogos
+    description: Catálogo de Distritos, Secciones, Municipios, Circuitos, Establecimientos y Mesas.
+  - name: estados
+    description: Estado de avance del Recuento Provisional de Resultados.
+paths:
+  /resultados/getResultados:
+    get:
+      tags:
+        - resultados
+      summary: Devuelve los resultados para el Id de la categoria solicitada.
+      description: Devuelve los resultados para el Id de la categoría electoral solicitada. Para solicitar un ámbito en concreto será necesario enviar también los Id de los padres del ámbito. Por ejemplo para solicitar una sección, sera necesario enviar el Id de distrito. El Id de la mesa, sera el código único de la mesa (distrito + sección + número mesa).
+      operationId: getResultados
+      parameters:
+        - name: distritoId
+          in: query
+          description: Id del distrito
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: seccionProvincialId
+          in: query
+          description: Id de sección provincial
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: seccionId
+          in: query
+          description: Id de Sección, Departamento o Comuna.
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: municipioId
+          in: query
+          description: Id del Municipio
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: circuitoId
+          in: query
+          description: Id del Circuito
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: establecimientoId
+          in: query
+          description: Id del Establecimiento de votación
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: mesaId
+          in: query
+          description: Id de la Mesa
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: categoriaId
+          in: query
+          description: Id de la categoría electoral para la cual se están solicitando datos.
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValorElectoralTotalizado"
+        "400":
+          description: Invalid ID value
+          content: {}
+      security:
+        - bearer_auth:
+            - read
+  /catalogo/getCatalogo:
+    get:
+      tags:
+        - catalogos
+      summary: Obtener el Catálogo completo de ámbitos para cada una de las categorias.
+      description: Obtener el catálogo completo de ámbitos para cada una de las categorias. Hay que tener en cuenta que no hay información disponible en todos los ámbitos para todas las categorias.
+      operationId: getCatalogo
+      parameters: []
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Catalogo"
+      security:
+        - bearer_auth:
+            - read:publicacion
+  /catalogo/getAgrupacionesListas:
+    get:
+      tags:
+        - catalogos
+      summary: Obtener el catálogo por categoria de agrupaciones politicas y listas.
+      description: Obtener el catálogo por categoria de agrupaciones políticas y listas. Consultando un ámbito concreto, se puede obtener la lista de agrupaciones y listas que participan en él.
+      operationId: getAgrupacionesListas
+      parameters:
+        - name: distritoId
+          in: query
+          description: Id del ditrito
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: seccionProvincialId
+          in: query
+          description: Id de sección provincial
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: seccionId
+          in: query
+          description: Id de Sección, Departamento o Comuna.
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: municipioId
+          in: query
+          description: Id del Municipio
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: circuitoId
+          in: query
+          description: Id del Circuito
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: establecimientoId
+          in: query
+          description: Id del Establecimiento de votación
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: mesaId
+          in: query
+          description: Id de la Mesa
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: categoriaId
+          in: query
+          description: Id de la categoría electoral para la cual se están solicitando datos.
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Agrupacion"
+        "400":
+          description: Invalid ID value
+          content: {}
+      security:
+        - bearer_auth:
+            - read
+  /estados/estadoRecuento:
+    get:
+      tags:
+        - estados
+      summary: Obtener el avance del recuento provisional de resultados.
+      description: Obtener el avance del recuento provisional de resultados. Si no se especifican parámetros, se devuelve el total del país.
+      operationId: getEstadoRecuento
+      parameters:
+        - name: distritoId
+          in: query
+          description: Id del ditrito
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: seccionElectoralId
+          in: query
+          description: Id de seccion electoral
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: seccionId
+          in: query
+          description: Id de Seccion/Departamento/Comuna
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: municipioId
+          in: query
+          description: Id del Municipio
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: circuitoId
+          in: query
+          description: Id del Circuito
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: establecimientoId
+          in: query
+          description: Id del Establecimiento
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: mesaId
+          in: query
+          description: Id de la Mesa
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: categoriaId
+          in: query
+          description: Id de la categoría electoral para recuperar los datos.
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EstadoRecuento"
+        "400":
+          description: Invalid parameters
+          content: {}
+      security:
+        - bearer_auth:
+            - read
+  /resultados/getTiff:
+    get:
+      tags:
+        - resultados
+      summary: Obtener el TIFF de la Mesa por ID
+      description: Obtener el TIFF de la mesa enviando el ID de la misma.
+      operationId: getTiffUsingGET
+      parameters:
+        - name: mesaId
+          in: query
+          description: ID de la Mesa
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TiffMesa"
+        "400":
+          description: Invalid ID value
+          content: {}
+      security:
+        - bearer_auth:
+            - read
+components:
+  schemas:
+    ValoresTotalizadosOtros:
+      type: object
+      properties:
+        votosNulos:
+          type: integer
+          format: int64
+        votosNulosPorcentaje:
+          type: number
+          format: double
+        votosEnBlanco:
+          type: integer
+          format: int64
+        votosEnBlancoPorcentaje:
+          type: number
+          format: double
+        votosRecurridosComandoImpugnados:
+          type: integer
+          format: int64
+        votosRecurridosComandoImpugnadosPorcentaje:
+          type: number
+          format: double
+    ValorElectoralTotalizado:
+      type: object
+      properties:
+        fechaTotalizacion:
+          type: string
+          format: date-time
+        estadoRecuento:
+          $ref: "#/components/schemas/EstadoRecuento"
+        valoresTotalizadosPositivos:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValoresAgrupacion"
+        valoresTotalizadosOtros:
+          $ref: "#/components/schemas/ValoresTotalizadosOtros"
+    Catalogo:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: Numero de versión de ámbitos, para que los usuarios puedan conocer cuando ha habido un cambio en la lista de ámbitos.
+          format: int64
+        ambitosPorCategoria:
+          type: array
+          description: Vector de ámbitos por categoria
+          items:
+            $ref: "#/components/schemas/AmbitosCategoria"
+        niveles:
+          type: array
+          description: Lista de niveles en el catálogo.
+          items:
+            $ref: "#/components/schemas/Nivel"
+        categorias:
+          type: array
+          description: Lista de categorías que se utilizan en la elección.
+          items:
+            $ref: "#/components/schemas/Categoria"
+    AmbitosCategoria:
+      type: object
+      properties:
+        categoriaId:
+          type: integer
+          format: int64
+        ambitos:
+          type: array
+          description: Vector de ámbitos en la categoría correspondiente.
+          items:
+            $ref: "#/components/schemas/Ambito"
+    Nivel:
+      type: object
+      properties:
+        nivelId:
+          type: integer
+          description: Código del nivel.
+          format: int64
+        nombre:
+          type: string
+          description: Nombre del nivel.
+    Categoria:
+      type: object
+      properties:
+        orden:
+          type: integer
+          description: Orden de visualización en las aplicaciones de presentación de resultados.
+          format: int64
+        categoriaId:
+          type: integer
+          description: Id de la categoría electoral.
+          format: int64
+        nombre:
+          type: string
+    Ambito:
+      type: object
+      properties:
+        codigoAmbitos:
+          $ref: "#/components/schemas/CodigosAmbito"
+        nivelId:
+          type: integer
+          description: Tipo de nivel del ámbito (distrito, sección provincial, sección, municipio, circuito, establecimiento o mesa).
+          format: int64
+        nombre:
+          type: string
+          description: Nombre del ámbito correspondiente.
+    CodigosAmbito:
+      required:
+        - ambitoId
+        - indice
+      type: object
+      properties:
+        indice:
+          type: integer
+          description: Posición del ámbito en el catálogo de ámbitos de la categoría correspondiente. Este índice se refiere a la posición del ámbito en el array de ámbitos.
+          format: int64
+        distritoId:
+          type: string
+          description: Id del ditrito
+        seccionProvincialId:
+          type: string
+          description: Id de seccion provincial (solo presente en algunas provincias)
+        seccionId:
+          type: string
+          description: Id de Sección, Departamento o Comuna.
+        municipioId:
+          type: string
+          description: Id del Municipio.
+        circuitoId:
+          type: string
+          description: Id del Circuito.
+        establecimientoId:
+          type: string
+          description: Id del Establecimiento.
+        mesaId:
+          type: string
+          description: Id de la Mesa (distritoId + seccionId + número mesa).
+      description: Codificación completa del ambito.
+    ValoresAgrupacion:
+      type: object
+      properties:
+        idAgrupacion:
+          type: string
+          description: Id de la agrupación politica. Este Id es un código interno único generado en el Sistema de Recuento, que podría no coincidir con el código del telegrama.
+        idAgrupacionTelegrama:
+          type: string
+          description: Id de la agrupacion politíca en el Telegrama. Este código puede no ser único para todo el pais.
+        nombreAgrupacion:
+          type: string
+        urlLogo:
+          type: string
+        votos:
+          type: integer
+          format: int64
+        votosPorcentaje:
+          type: number
+          format: double
+        listas:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValoresLista"
+      description: Agrupación política conformada por uno o más partidos.
+    ValoresLista:
+      type: object
+      properties:
+        idLista:
+          type: string
+          description: Id de la lista. Este Id es un código interno único generado en el Sistema de Recuento.
+        nombreLista:
+          type: string
+        votos:
+          type: integer
+          format: int64
+        votosPorcentaje:
+          type: number
+          format: double
+    Agrupacion:
+      type: object
+      properties:
+        idAgrupacion:
+          type: string
+          description: Id de la agrupación política. Este Id es un código interno único generado en el Sistema de Recuento, que podría no coincidir con el codigo del telegrama.
+        idAgrupacionTelegrama:
+          type: string
+          description: Id de la agrupación política en el Telegrama. Este código puede no ser único para todo el pais.
+        nombreAgrupacion:
+          type: string
+        urlLogo:
+          type: string
+        listas:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lista"
+      description: Agrupación política conformada por uno o más partidos.
+    Lista:
+      type: object
+      properties:
+        idLista:
+          type: string
+          description: Id de la lista. Este Id es un código interno único generado en el Sistema de Recuento.
+        nombreLista:
+          type: string
+    EstadoRecuento:
+      type: object
+      properties:
+        mesasEsperadas:
+          type: integer
+          format: int64
+        mesasTotalizadas:
+          type: integer
+          format: int64
+        mesasTotalizadasPorcentaje:
+          type: number
+          description: Porcentaje de totalización de mesas sobre el total del mesas esperadas.
+          format: double
+        cantidadElectores:
+          type: integer
+          description: Cantidad de electores sobre mesas totalizadas.
+          format: int64
+        cantidadVotantes:
+          type: integer
+          description: Cantidad de votantes sobre mesas totalizadas.
+          format: int64
+        participacionPorcentaje:
+          type: number
+          description: Porcentaje de participación sobre mesas totalizadas.
+          format: double
+    TiffMesa:
+      type: object
+      properties:
+        archivo:
+          type: string
+          description: Contenido del archivo TIFF en codificación Base64.
+          format: byte
+        fechaEscaneo:
+          type: string
+          description: Fecha y hora de escaneo del telegrama por el Sistema de Transmisión.
+          format: date-time
+        codigoHash:
+          type: string
+          description: Código verificador MD5 del archivo TIFF.
+        fechaTotalizacion:
+          type: string
+          description: Fecha y hora de totalización del telegrama.
+          format: date-time
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
