@@ -7,12 +7,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
-  // const fileData = fs.readFileSync("public/data/categories.json", "utf-8");
-
-  // const categories = JSON.parse(fileData);
-
-  // const categoriesName = Object.getOwnPropertyNames(categories);
-
   const regionsByCategory = await regions.getRegionsByCategeory();
 
   res.status(200).json({
