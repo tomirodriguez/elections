@@ -16,22 +16,32 @@ export default async function handler(req, res) {
     (category) => category.code === categoryId
   );
 
-  const resultsByRegion = await Promise.all(
-    regionByCategory.country.districts.map((region) => {
-      return fetcher.get(
-        `resultados/getResultados?categoriaId=${categoryId}&distritoId=${region.code}`
-      ).then(response => {
-        return {
-          region: region.code,
-          state: response.data
-        }
-      });
-    })
-  );
+  try {
+    const resultsByRegion = await Promise.all(
+      regionByCategory.country.districts.map((region) => {
+        return fetcher
+          .get(
+            `resultados/getResultados?categoriaId=${categoryId}&distritoId=${region.code}`
+          )
+          .then((response) => {
+            return {
+              region: region.code,
+              state: response.data,
+            };
+          });
+      })
+    );
 
-  res.status(200).json({
-    error: false,
-    message: "Data successfully fetched!",
-    response: resultsByRegion,
-  });
+    res.status(200).json({
+      error: false,
+      message: "Data successfully fetched!",
+      response: resultsByRegion,
+    });
+  } catch (error) {
+    res.status(404).json({
+      error: true,
+      message: "Category not found!",
+      response: null,
+    });
+  }
 }
