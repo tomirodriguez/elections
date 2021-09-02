@@ -6,32 +6,33 @@ const ApiFetcher = require("../../../../api-elecciones/utils/axios").ApiFetcher;
 export default async function handler(req, res) {
   const { categoryId, provinceId } = req.query;
 
-  // Chequear si esta en base de datos. Si no esta, pedirlo
   const tokenResponse = await token.getToken();
   const fetcher = new ApiFetcher(tokenResponse);
-  const regionsByCategory = await regions.getRegionsByCategeory(fetcher);
-  // Guardar en base de datos
 
-  const regionByCategory = regionsByCategory.find(
-    (category) => category.code === categoryId
-  );
+  try {
+    const resultsByRegion = await fetcher
+      .get(
+        `resultados/getResultados?categoriaId=${categoryId}&distritoId=${provinceId}`
+      )
+      .then((response) => {
+        if (response.data)
+          return {
+            region: provinceId,
+            state: response.data,
+          };
+        throw new Error("No found");
+      });
 
-  const province = regionByCategory.country.districts.find(
-    (district) => district.code === provinceId
-  );
-
-  if (province) {
     res.status(200).json({
       error: false,
       message: "Data successfully fetched!",
-      response: province,
+      response: resultsByRegion,
     });
-  } else {
+  } catch (error) {
     res.status(404).json({
       error: true,
-      message: "Province not found for current category.",
+      message: "Province not found!",
       response: null,
     });
-
   }
 }
