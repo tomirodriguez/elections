@@ -9,9 +9,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
+  // Chequear si esta en base de datos. Si no esta, pedirlo
   const tokenResponse = await token.getToken();
   const fetcher = new ApiFetcher(tokenResponse);
   const regionsByCategory = await regions.getRegionsByCategeory(fetcher);
+  // Guardar en base de datos
 
   res.status(200).json({
     error: false,
