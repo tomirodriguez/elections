@@ -33,10 +33,6 @@ export default async function handler(req, res) {
     );
 
     let total = {
-      regionData: {
-        code: '99',
-        name: 'Argentina'
-      },
       estadoRecuento: {
         mesasEsperadas: 0,
         mesasTotalizadas: 0,
@@ -107,7 +103,13 @@ export default async function handler(req, res) {
     res.status(200).json({
       error: false,
       message: "Data successfully fetched!",
-      response: { total, regions: resultsByRegion },
+      response: {
+        total, regions: resultsByRegion,
+        region: {
+          code: '99',
+          name: 'Argentina'
+        },
+      },
     });
   } catch (error) {
     res.status(404).json({
