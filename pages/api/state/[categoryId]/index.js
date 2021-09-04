@@ -33,6 +33,10 @@ export default async function handler(req, res) {
     );
 
     let total = {
+      regionData: {
+        code: '99',
+        name: 'Argentina'
+      },
       estadoRecuento: {
         mesasEsperadas: 0,
         mesasTotalizadas: 0,
