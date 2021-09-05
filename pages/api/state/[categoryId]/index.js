@@ -105,9 +105,7 @@ export default async function handler(req, res) {
     res.status(200).json({
       error: false,
       message: "Data successfully fetched!",
-      response: {
-        resultsByRegion,
-      },
+      response: resultsByRegion
     });
   } catch (error) {
     res.status(404).json({
