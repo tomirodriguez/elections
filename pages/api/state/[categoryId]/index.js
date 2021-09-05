@@ -25,7 +25,7 @@ export default async function handler(req, res) {
           )
           .then((response) => {
             return {
-              region: region.code,
+              code: region.code,
               state: response.data,
             };
           });
@@ -98,7 +98,7 @@ export default async function handler(req, res) {
 
     total.estadoRecuento.votosTotales = totalVotes;
 
-    resultsByRegion.unshift({ region: '99', state: total })
+    resultsByRegion.unshift({ code: '99', state: total })
 
 
 
