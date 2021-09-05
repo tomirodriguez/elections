@@ -98,17 +98,15 @@ export default async function handler(req, res) {
 
     total.estadoRecuento.votosTotales = totalVotes;
 
+    resultsByRegion.unshift({ region: '99', state: total })
+
 
 
     res.status(200).json({
       error: false,
       message: "Data successfully fetched!",
       response: {
-        total, regions: resultsByRegion,
-        region: {
-          code: '99',
-          name: 'Argentina'
-        },
+        resultsByRegion,
       },
     });
   } catch (error) {
