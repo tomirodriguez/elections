@@ -6,8 +6,12 @@ const ApiFetcher = require("../../../../../api-elecciones/utils/axios").ApiFetch
 export default async function handler(req, res) {
   const { categoryId, provinceId } = req.query;
 
+
+  // Chequear si esta en base de datos. Si no esta, pedirlo
   const tokenResponse = await token.getToken();
   const fetcher = new ApiFetcher(tokenResponse);
+  const regionsByCategory = await regions.getRegionsByCategeory(fetcher);
+  // Guardar en base de datos
 
   try {
     const resultsByRegion = await fetcher
@@ -17,7 +21,7 @@ export default async function handler(req, res) {
       .then((response) => {
         if (response.data)
           return {
-            province: provinceId,
+            code: provinceId,
             state: response.data,
           };
         throw new Error("No found");

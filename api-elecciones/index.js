@@ -11,8 +11,8 @@ const start = async () => {
   const regionsByCategory = await regions.getRegionsByCategeory(fetcher);
   const lists = await candidates.getCandidatesByCategeory(fetcher);
 
-  // fileWriter.writeFile("regionsByCategory", regionsByCategory);
-  // fileWriter.writeFile("candidatesByCategory", lists);
+  fileWriter.writeFile("regionsByCategory", regionsByCategory);
+  fileWriter.writeFile("candidatesByCategory", lists);
 };
 
 start();
