@@ -52,6 +52,8 @@ export default async function handler(req, res) {
 
     let totalVotes = 0
 
+    console.log(resultsByRegion)
+
     resultsByRegion.forEach(region => {
       const regionData = region.state
       Object.getOwnPropertyNames(total.estadoRecuento).forEach(prop => {
@@ -61,10 +63,12 @@ export default async function handler(req, res) {
         total.valoresTotalizadosOtros[prop] += regionData.valoresTotalizadosOtros[prop]
       })
 
+      console.log(regionData.valoresTotalizadosPositivos)
+
       regionData.valoresTotalizadosPositivos.forEach(agrupation => {
         const agrupationFound = total.valoresTotalizadosPositivos.find(agrupationInArray => agrupationInArray.idAgrupacion === agrupation.idAgrupacion)
         if (!agrupationFound) {
-          total.valoresTotalizadosPositivos.push(agrupation)
+          total.valoresTotalizadosPositivos.push({ ...agrupation })
         } else {
           agrupationFound.votos += agrupation.votos;
           agrupation.listas.forEach(list => {
