@@ -26,7 +26,6 @@ export default async function handler(req, res) {
           .then((response) => {
             return {
               code: region.code,
-              name: region.name,
               state: response.data,
             };
           });
@@ -89,17 +88,17 @@ export default async function handler(req, res) {
 
     });
 
-    total.estadoRecuento.mesasTotalizadasPorcentaje = total.estadoRecuento.mesasTotalizadas * 100 / total.estadoRecuento.mesasEsperadas;
-    total.estadoRecuento.participacionPorcentaje = total.estadoRecuento.cantidadVotantes * 100 / total.estadoRecuento.cantidadElectores;
+    total.estadoRecuento.mesasTotalizadasPorcentaje = total.estadoRecuento.mesasTotalizadas * 100 / total.estadoRecuento.mesasEsperadas || 0;
+    total.estadoRecuento.participacionPorcentaje = total.estadoRecuento.cantidadVotantes * 100 / total.estadoRecuento.cantidadElectores || 0;
 
-    total.valoresTotalizadosOtros.votosEnBlancoPorcentaje = total.valoresTotalizadosOtros.votosEnBlanco * 100 / total.estadoRecuento.cantidadVotantes;
-    total.valoresTotalizadosOtros.votosRecurridosComandoImpugnadosPorcentaje = total.valoresTotalizadosOtros.votosRecurridosComandoImpugnados * 100 / total.estadoRecuento.cantidadVotantes;
-    total.valoresTotalizadosOtros.votosNulosPorcentaje = total.valoresTotalizadosOtros.votosNulos * 100 / total.estadoRecuento.cantidadVotantes;
+    total.valoresTotalizadosOtros.votosEnBlancoPorcentaje = total.valoresTotalizadosOtros.votosEnBlanco * 100 / total.estadoRecuento.cantidadVotantes || 0;
+    total.valoresTotalizadosOtros.votosRecurridosComandoImpugnadosPorcentaje = total.valoresTotalizadosOtros.votosRecurridosComandoImpugnados * 100 / total.estadoRecuento.cantidadVotantes || 0;
+    total.valoresTotalizadosOtros.votosNulosPorcentaje = total.valoresTotalizadosOtros.votosNulos * 100 / total.estadoRecuento.cantidadVotantes || 0;
 
 
     total.estadoRecuento.votosTotales = totalVotes;
 
-    resultsByRegion.unshift({ code: '99', name: 'Argentina', state: total })
+    resultsByRegion.unshift({ code: '99', state: total })
 
 
 
