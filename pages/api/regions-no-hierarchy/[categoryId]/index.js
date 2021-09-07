@@ -2,8 +2,16 @@
 const regions = require("../../../../api-elecciones/utils/regionsParser");
 const token = require("../../../../api-elecciones/utils/getToken");
 const ApiFetcher = require("../../../../api-elecciones/utils/axios").ApiFetcher;
+import NextCors from 'nextjs-cors';
+
 
 export default async function handler(req, res) {
+  await NextCors(req, res, {
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    origin: '*',
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  });
+
   const { categoryId } = req.query;
 
   // Chequear si esta en base de datos. Si no esta, pedirlo
