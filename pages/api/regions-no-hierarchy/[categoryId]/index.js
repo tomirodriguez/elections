@@ -3,7 +3,7 @@ const regions = require("../../../../api-elecciones/utils/regionsParser");
 const token = require("../../../../api-elecciones/utils/getToken");
 const ApiFetcher = require("../../../../api-elecciones/utils/axios").ApiFetcher;
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
 
   await runMiddleware(req, res, cors)
 
