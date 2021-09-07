@@ -2,7 +2,7 @@
 const regions = require("../../../../api-elecciones/utils/regionsParser");
 const token = require("../../../../api-elecciones/utils/getToken");
 const ApiFetcher = require("../../../../api-elecciones/utils/axios").ApiFetcher;
-import NextCors from 'nextjs-cors';
+const NextCors = require('nextjs-cors');
 
 
 export default async function handler(req, res) {
