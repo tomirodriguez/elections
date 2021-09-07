@@ -26,6 +26,7 @@ export default async function handler(req, res) {
           .then((response) => {
             return {
               code: provinceId + region.code,
+              name: region.name,
               state: response.data,
             };
           });
@@ -40,6 +41,7 @@ export default async function handler(req, res) {
         .then((response) => {
           return {
             code: provinceId,
+            name: regionByCategory.country.districts.find(district => district.code === provinceId).name,
             state: response.data,
           };
         })

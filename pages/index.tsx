@@ -28,8 +28,6 @@ export default function Home() {
       });
   }, []);
 
-  console.log(categories);
-
   return (
     <div>
       <Head>
@@ -38,7 +36,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container">
+      <main>
         <ul
           className="d-flex jc-between"
           style={{
