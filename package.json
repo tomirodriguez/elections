@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "cors": "^2.8.5",
     "next": "11.1.0",
     "nextjs-cors": "^2.0.0",
     "react": "17.0.2",

@@ -2,15 +2,30 @@
 const regions = require("../../../../api-elecciones/utils/regionsParser");
 const token = require("../../../../api-elecciones/utils/getToken");
 const ApiFetcher = require("../../../../api-elecciones/utils/axios").ApiFetcher;
-const NextCors = require('nextjs-cors');
+import Cors from 'cors';
 
+// Initializing the cors middleware
+const cors = Cors({
+  methods: ['GET', 'HEAD'],
+})
+
+// Helper method to wait for a middleware to execute before continuing
+// And to throw an error when an error happens in a middleware
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result)
+      }
+
+      return resolve(result)
+    })
+  })
+}
 
 export default async function handler(req, res) {
-  await NextCors(req, res, {
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-    origin: '*',
-    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-  });
+
+  await runMiddleware(req, res, cors)
 
   const { categoryId } = req.query;
 
