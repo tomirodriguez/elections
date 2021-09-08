@@ -5,8 +5,6 @@ const ApiFetcher = require("../../../../api-elecciones/utils/axios").ApiFetcher;
 
 export default async function handler(req, res) {
 
-  await runMiddleware(req, res, cors)
-
   const { categoryId } = req.query;
 
   // Chequear si esta en base de datos. Si no esta, pedirlo
